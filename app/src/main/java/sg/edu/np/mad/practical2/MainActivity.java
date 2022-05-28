@@ -22,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
         //launch from ListActivity
         Intent receivingEnd = getIntent();
         //Integer genInt = receivingEnd.getIntExtra("genInt",0);
-        Integer position = receivingEnd.getIntExtra("userPosition",0);
-        User usr = ListActivity.user20List.get(position);
+        Integer userID = receivingEnd.getIntExtra("userID",-100);
+        DBHandler db = new DBHandler(this);
+        User user = db.getSpecificUSer(userID);
+        //User usr = ListActivity.user20List.get(position);
 
         //TextView txt = findViewById(R.id.idText);
         //txt.setText(String.format("MAD %s",genInt));//java string formatting, like python printf
@@ -31,25 +33,26 @@ public class MainActivity extends AppCompatActivity {
         TextView nameTxt = findViewById(R.id.nameText);
         TextView descTxt = findViewById(R.id.descText);
 
-        nameTxt.setText(String.format("%s", usr.name));
-        descTxt.setText(String.format("%s", usr.description));
+        nameTxt.setText(String.format("%s", user.name));
+        descTxt.setText(String.format("%s", user.description));
 
         Button btn = findViewById(R.id.following);
         //User usr = initUser();
-        setF(usr,btn);
+        setF(user,btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String toastN;
-                if(usr.followed == false){ //if user is not following
-                    usr.followed = true;//set to follow
+                if(user.followed == false){ //if user is not following
+                    user.followed = true;//set to follow
                     toastN = "Followed";
                 }
                 else{//if user is following
-                    usr.followed = false; //set to unfollow
+                    user.followed = false; //set to unfollow
                     toastN = "Unfollowed";
                 }
-                setF(usr,btn);
+                setF(user,btn);
+                db.updateUser(user);
 
                 //Toast message
                 Toast tNotif = Toast.makeText(MainActivity.this,toastN,Toast.LENGTH_SHORT);

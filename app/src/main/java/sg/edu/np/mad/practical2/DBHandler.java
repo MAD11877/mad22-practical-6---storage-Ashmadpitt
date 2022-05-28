@@ -17,7 +17,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private String col1 = "DESCRIPTION";
     private String col2 = "ID";
     private String col3 = "FOLLOWED";
-    private DBHandler(Context c){
+    DBHandler(Context c){
         super(c,"users.db",null,1);
     }
     @Override
